@@ -160,8 +160,12 @@ h1, h2, h3, h4, h5 {
 /* Blur is the expensive part of this effect. Phones animate the same number
    of elements on far less GPU, so soften the radius there. */
 @media (max-width: 640px) {
-  [data-reveal],
-  [data-reveal-group] > * {
+  /* Scoped to the not-yet-revealed state on purpose. Written as a bare
+     [data-reveal] this rule sits after the "shown" rule at equal specificity,
+     wins on source order, and pins the blur on permanently — every phone
+     would see the entire page stuck out of focus. */
+  [data-reveal]:not([data-reveal="shown"]),
+  [data-reveal-group]:not([data-reveal-group="shown"]) > * {
     filter: blur(5px);
   }
 }
