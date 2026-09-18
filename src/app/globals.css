@@ -1,26 +1,205 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-navy-50: #f2f6fb;
+  --color-navy-100: #e3ecf7;
+  --color-navy-200: #c2d6ec;
+  --color-navy-300: #8fb3db;
+  --color-navy-400: #5688c5;
+  --color-navy-500: #336aae;
+  --color-navy-600: #245291;
+  --color-navy-700: #1d4176;
+  --color-navy-800: #12325c;
+  --color-navy-900: #0b1f3a;
+  --color-navy-950: #061428;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-gold-50: #fff9ed;
+  --color-gold-100: #fff1d4;
+  --color-gold-200: #ffdfa8;
+  --color-gold-300: #ffc871;
+  --color-gold-400: #ffab3a;
+  --color-gold-500: #f5a524;
+  --color-gold-600: #d9820f;
+  --color-gold-700: #b4620f;
+  --color-gold-800: #914d14;
+  --color-gold-900: #774113;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-plus-jakarta), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-fade-up: fade-up 0.6s ease-out both;
+  --animate-fade-in: fade-in 0.8s ease-out both;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: var(--color-navy-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Rich text rendered from Markdown (blog posts) */
+.prose-vikas :where(h2) {
+  font-size: 1.5rem; line-height: 2rem; font-weight: 700;
+  margin-top: 2.5rem; margin-bottom: 0.875rem; color: var(--color-navy-900);
+}
+.prose-vikas :where(h3) {
+  font-size: 1.2rem; line-height: 1.75rem; font-weight: 700;
+  margin-top: 2rem; margin-bottom: 0.625rem; color: var(--color-navy-800);
+}
+.prose-vikas :where(p) { margin-bottom: 1.125rem; line-height: 1.8; color: var(--color-navy-700); }
+.prose-vikas :where(ul) { list-style: disc; padding-left: 1.4rem; margin-bottom: 1.125rem; }
+.prose-vikas :where(ol) { list-style: decimal; padding-left: 1.4rem; margin-bottom: 1.125rem; }
+.prose-vikas :where(li) { margin-bottom: 0.4rem; line-height: 1.75; color: var(--color-navy-700); }
+.prose-vikas :where(a) { color: var(--color-navy-600); text-decoration: underline; text-underline-offset: 3px; }
+.prose-vikas :where(strong) { color: var(--color-navy-900); font-weight: 650; }
+.prose-vikas :where(blockquote) {
+  border-left: 3px solid var(--color-gold-400); padding-left: 1rem;
+  font-style: italic; color: var(--color-navy-600); margin: 1.5rem 0;
+}
+.prose-vikas :where(img) { border-radius: 0.75rem; margin: 1.5rem 0; }
+.prose-vikas :where(code) {
+  background: var(--color-navy-50); padding: 0.15em 0.4em;
+  border-radius: 0.3rem; font-size: 0.9em;
+}
+
+/* ------------------------------------------------------------------ *
+ * Scroll reveal (src/components/Reveal.tsx)
+ *
+ * The motion is a blur-and-rise rather than a plain fade: elements come in
+ * slightly small, nudged down and defocused, then settle into place. That
+ * combination is what makes current product sites feel "expensive" — a fade
+ * alone reads flat.
+ *
+ * Easing is easeOutQuint, so the movement is quick to start and takes its
+ * time arriving, which is why it reads as unhurried at this duration.
+ * ------------------------------------------------------------------ */
+
+:root {
+  --reveal-duration: 950ms;
+  --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal],
+[data-reveal-group] > * {
+  opacity: 0;
+  filter: blur(8px);
+  transition:
+    opacity var(--reveal-duration) var(--reveal-ease),
+    transform var(--reveal-duration) var(--reveal-ease),
+    filter calc(var(--reveal-duration) * 0.7) var(--reveal-ease);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+
+/* Direction comes from the variant on the element (or on the group). */
+[data-reveal-variant="up"],
+[data-reveal-variant="up"] > *,
+[data-reveal]:not([data-reveal-variant]),
+[data-reveal-group]:not([data-reveal-variant]) > * {
+  transform: translate3d(0, 30px, 0) scale(0.97);
+}
+[data-reveal-variant="fade"],
+[data-reveal-variant="fade"] > * {
+  transform: none;
+}
+[data-reveal-variant="left"],
+[data-reveal-variant="left"] > * {
+  transform: translate3d(-34px, 0, 0) scale(0.97);
+}
+[data-reveal-variant="right"],
+[data-reveal-variant="right"] > * {
+  transform: translate3d(34px, 0, 0) scale(0.97);
+}
+[data-reveal-variant="zoom"],
+[data-reveal-variant="zoom"] > * {
+  transform: scale(0.9);
+}
+/* Shown state — listed after the rules above so it wins on equal specificity. */
+[data-reveal="shown"],
+[data-reveal-group="shown"] > * {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+  will-change: auto;
+}
+
+/* Stagger the children of a group. Anything past the tenth lands together,
+   which is fine — by then the user has scrolled well past the first ones. */
+[data-reveal-group] > *:nth-child(1) { transition-delay: 0ms; }
+[data-reveal-group] > *:nth-child(2) { transition-delay: 110ms; }
+[data-reveal-group] > *:nth-child(3) { transition-delay: 220ms; }
+[data-reveal-group] > *:nth-child(4) { transition-delay: 330ms; }
+[data-reveal-group] > *:nth-child(5) { transition-delay: 440ms; }
+[data-reveal-group] > *:nth-child(6) { transition-delay: 550ms; }
+[data-reveal-group] > *:nth-child(7) { transition-delay: 660ms; }
+[data-reveal-group] > *:nth-child(8) { transition-delay: 770ms; }
+[data-reveal-group] > *:nth-child(9) { transition-delay: 880ms; }
+[data-reveal-group] > *:nth-child(n + 10) { transition-delay: 960ms; }
+
+/* Blur is the expensive part of this effect. Phones animate the same number
+   of elements on far less GPU, so soften the radius there. */
+@media (max-width: 640px) {
+  [data-reveal],
+  [data-reveal-group] > * {
+    filter: blur(5px);
+  }
+}
+
+/* Touch feedback — a card should acknowledge a tap on a phone, where there
+   is no hover state to rely on. */
+@media (hover: none) {
+  a[class*="rounded-2xl"]:active,
+  button:active {
+    transform: scale(0.985);
+    transition-duration: 80ms;
+  }
+}
+
+/* Drag-scrollable strips (news ticker) keep their scrolling behaviour but
+   hide the bar itself, which would otherwise sit under the headlines. */
+.no-scrollbar {
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* legacy Edge */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;                  /* Chrome, Safari */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Reveal elements must end up visible, not merely snap instantly — if the
+     observer never fires they would otherwise stay at opacity 0 forever. */
+  [data-reveal],
+  [data-reveal-group] > * {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
