@@ -96,18 +96,18 @@ export default function Header() {
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <Link href="/" className="group flex shrink-0 items-center gap-2.5">
-            <span className="grid size-10 place-items-center rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 font-display text-lg font-bold text-white shadow-md shadow-navy-900/20 ring-1 ring-gold-500/30 transition-shadow group-hover:shadow-lg">
-              V
-            </span>
-            <span className="leading-tight">
-              <span className="block font-display text-[17px] font-bold text-navy-900">
-                {site.name}
-              </span>
-              <span className="block text-[10.5px] font-medium tracking-[0.13em] text-navy-500 uppercase">
-                Educational Consultants
-              </span>
-            </span>
+          {/* The real logo, lifted from the company's own poster artwork.
+              It already contains the wordmark and tagline, so no text sits
+              beside it — the alt text carries the name for screen readers. */}
+          <Link href="/" className="group flex shrink-0 items-center">
+            <Image
+              src="/logo-compact.png"
+              alt={`${site.name} — Overseas Educational Consultants`}
+              width={478}
+              height={120}
+              priority
+              className="h-9 w-auto sm:h-11"
+            />
           </Link>
 
           {/* Desktop nav */}

@@ -56,7 +56,7 @@ export function PageHero({
       )}
       <div className="absolute -top-24 -right-24 size-80 rounded-full bg-gold-500/10 blur-3xl" aria-hidden />
 
-      <div className="relative mx-auto max-w-7xl px-6 py-14 sm:py-20">
+      <div className="relative mx-auto max-w-7xl px-6 py-8 sm:py-10">
         {breadcrumb && (
           <nav aria-label="Breadcrumb" className="mb-4">
             <ol className="flex flex-wrap items-center gap-1.5 text-[13px] text-navy-300">
@@ -106,7 +106,9 @@ export function Section({
   id?: string;
 }) {
   return (
-    <section id={id} className={`py-14 sm:py-20 ${className}`}>
+    // 0.5rem top and bottom, so two adjacent sections sit 1rem apart. This
+    // one value sets the vertical rhythm for every page on the site.
+    <section id={id} className={`py-2 ${className}`}>
       <div className="mx-auto max-w-7xl px-6">{children}</div>
     </section>
   );
@@ -219,7 +221,7 @@ export function CTABand({
         className="absolute inset-0 bg-navy-950/85 lg:bg-gradient-to-r lg:from-navy-950/95 lg:via-navy-950/90 lg:to-navy-900/70"
         aria-hidden
       />
-      <div className="relative mx-auto max-w-7xl px-6 py-14 sm:py-16">
+      <div className="relative mx-auto max-w-7xl px-6 py-8 sm:py-10">
         <div className="flex flex-col items-start justify-between gap-7 lg:flex-row lg:items-center">
           <div className="max-w-2xl">
             <h2 className="text-2xl font-bold text-balance text-white sm:text-3xl">

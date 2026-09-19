@@ -14,11 +14,13 @@ import CountUp from "@/components/CountUp";
 import Flag from "@/components/Flag";
 import HeroSlider from "@/components/HeroSlider";
 import NewsTicker from "@/components/NewsTicker";
+import PosterStrip from "@/components/PosterStrip";
 import ServiceIcon from "@/components/ServiceIcon";
 import { Button, CTABand, CardAction, Media, Section, SectionHeading, cardBody, cardImageWash, cardShell } from "@/components/ui";
 import { countries } from "@/lib/countries";
 import { countryPhoto, photos, postPhoto, servicePhoto } from "@/lib/images";
 import { processSteps, services } from "@/lib/services";
+import { posterStrip } from "@/lib/posters";
 import { slides } from "@/lib/slides";
 import { getNews, getPosts, formatDate } from "@/lib/blog";
 import { stats } from "@/lib/site";
@@ -95,6 +97,22 @@ export default function HomePage() {
       </section>
 
       <NewsTicker items={ticker} />
+
+      {/* Campaign posters — the company's own artwork, so this is the one
+          place on the page showing the brand exactly as it prints. */}
+      <Section className="bg-white">
+        <Reveal>
+          <SectionHeading
+            align="center"
+            eyebrow="From our campaigns"
+            title="Where our students are heading"
+            subtitle="Drag to browse — every poster links through to the destination or service it covers."
+          />
+        </Reveal>
+        <div className="mt-8">
+          <PosterStrip posters={posterStrip} />
+        </div>
+      </Section>
 
       {/* Services */}
       <Section className="bg-gradient-to-b from-navy-50/70 to-white">
@@ -199,7 +217,7 @@ export default function HomePage() {
       </Section>
 
       {/* Values */}
-      <Section className="overflow-x-clip bg-gradient-to-b from-white via-navy-50/60 to-white">
+      <Section className="overflow-x-clip bg-gradient-to-b from-white via-navy-50/60 to-white pb-12">
         {/* The heading leads the section at full width rather than sitting in
             a side column — this is the page's argument for the company, so it
             should not read as a caption next to a photo. */}
@@ -243,14 +261,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* The large margin only earns its place from sm up, where the
-                inset portrait hangs below the main frame. */}
-            <div className="mt-8 sm:mt-20">
-              <Button href="/about" variant="secondary">
-                Read our story
-                <ArrowRight className="size-4" aria-hidden />
-              </Button>
-            </div>
           </Reveal>
 
           <RevealGroup className="grid gap-5 sm:grid-cols-2 lg:col-span-7">
@@ -276,6 +286,13 @@ export default function HomePage() {
             ))}
           </RevealGroup>
         </div>
+
+        <Reveal className="mt-10 flex justify-center">
+          <Button href="/about" variant="secondary">
+            Read our story
+            <ArrowRight className="size-4" aria-hidden />
+          </Button>
+        </Reveal>
       </Section>
 
       {/* Process — dark photo band, breaking up the white sections */}
@@ -289,7 +306,7 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-navy-950/92" aria-hidden />
 
-        <div className="relative mx-auto max-w-7xl px-6 py-14 sm:py-20">
+        <div className="relative mx-auto max-w-7xl px-6 py-2">
           <Reveal className="mx-auto max-w-2xl text-center">
             <p className="mb-3 text-[12.5px] font-semibold tracking-[0.16em] text-gold-400 uppercase">
               How it works

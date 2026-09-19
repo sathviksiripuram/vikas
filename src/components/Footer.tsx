@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import Flag from "@/components/Flag";
@@ -24,18 +25,17 @@ export default function Footer() {
         <div className="grid gap-12 lg:grid-cols-12">
           {/* Brand */}
           <div className="lg:col-span-4">
-            <Link href="/" className="flex items-center gap-2.5">
-              <span className="grid size-10 place-items-center rounded-lg bg-white font-display text-lg font-bold text-navy-900">
-                V
-              </span>
-              <span className="leading-tight">
-                <span className="block font-display text-[17px] font-bold text-white">
-                  {site.name}
-                </span>
-                <span className="block text-[10.5px] font-medium tracking-[0.13em] text-navy-400 uppercase">
-                  Educational Consultants
-                </span>
-              </span>
+            {/* The logo artwork is printed on white, so on the navy footer
+                it sits on a white chip rather than being keyed out — the mark
+                has white inside the V that transparency would punch through. */}
+            <Link href="/" className="inline-block rounded-xl bg-white p-3">
+              <Image
+                src="/logo.png"
+                alt={`${site.name} — Overseas Educational Consultants`}
+                width={478}
+                height={148}
+                className="h-11 w-auto"
+              />
             </Link>
 
             <p className="mt-5 max-w-sm text-[14.5px] leading-relaxed text-navy-300">

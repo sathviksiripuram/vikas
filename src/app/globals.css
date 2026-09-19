@@ -112,50 +112,55 @@ h1, h2, h3, h4, h5 {
   will-change: opacity, transform, filter;
 }
 
-/* Direction comes from the variant on the element (or on the group). */
-[data-reveal-variant="up"],
-[data-reveal-variant="up"] > *,
+/* Direction comes from the variant. Each selector is qualified: a bare
+   [data-reveal-variant="..."] would also match the RevealGroup *container*,
+   which never gets a "shown" attribute — leaving every grid permanently
+   nudged 30px down and scaled to 0.97, overflowing its section. */
+[data-reveal][data-reveal-variant="up"],
+[data-reveal-group][data-reveal-variant="up"] > *,
 [data-reveal]:not([data-reveal-variant]),
 [data-reveal-group]:not([data-reveal-variant]) > * {
   transform: translate3d(0, 30px, 0) scale(0.97);
 }
-[data-reveal-variant="fade"],
-[data-reveal-variant="fade"] > * {
+[data-reveal][data-reveal-variant="fade"],
+[data-reveal-group][data-reveal-variant="fade"] > * {
   transform: none;
 }
-[data-reveal-variant="left"],
-[data-reveal-variant="left"] > * {
+[data-reveal][data-reveal-variant="left"],
+[data-reveal-group][data-reveal-variant="left"] > * {
   transform: translate3d(-34px, 0, 0) scale(0.97);
 }
-[data-reveal-variant="right"],
-[data-reveal-variant="right"] > * {
+[data-reveal][data-reveal-variant="right"],
+[data-reveal-group][data-reveal-variant="right"] > * {
   transform: translate3d(34px, 0, 0) scale(0.97);
 }
-[data-reveal-variant="zoom"],
-[data-reveal-variant="zoom"] > * {
+[data-reveal][data-reveal-variant="zoom"],
+[data-reveal-group][data-reveal-variant="zoom"] > * {
   transform: scale(0.9);
 }
-/* Shown state — listed after the rules above so it wins on equal specificity. */
-[data-reveal="shown"],
-[data-reveal-group="shown"] > * {
+
+/* Shown state. Both selectors carry two attributes so they match the
+   specificity of the qualified variant rules above and win on source order —
+   a single [data-reveal="shown"] would be outranked by
+   [data-reveal][data-reveal-variant="up"] and the element would stay offset.
+   Reveal always emits data-reveal-variant, so the first selector covers every
+   single-element case. */
+[data-reveal-variant][data-reveal="shown"],
+[data-reveal-group] > [data-reveal-item="shown"] {
   opacity: 1;
   filter: blur(0);
   transform: none;
   will-change: auto;
 }
 
-/* Stagger the children of a group. Anything past the tenth lands together,
-   which is fine — by then the user has scrolled well past the first ones. */
-[data-reveal-group] > *:nth-child(1) { transition-delay: 0ms; }
-[data-reveal-group] > *:nth-child(2) { transition-delay: 110ms; }
-[data-reveal-group] > *:nth-child(3) { transition-delay: 220ms; }
-[data-reveal-group] > *:nth-child(4) { transition-delay: 330ms; }
-[data-reveal-group] > *:nth-child(5) { transition-delay: 440ms; }
-[data-reveal-group] > *:nth-child(6) { transition-delay: 550ms; }
-[data-reveal-group] > *:nth-child(7) { transition-delay: 660ms; }
-[data-reveal-group] > *:nth-child(8) { transition-delay: 770ms; }
-[data-reveal-group] > *:nth-child(9) { transition-delay: 880ms; }
-[data-reveal-group] > *:nth-child(n + 10) { transition-delay: 960ms; }
+/* Children are observed individually, so the running order comes from the
+   scroll itself. This small modulo-3 offset only separates the cards that
+   genuinely enter together — a row on a wide screen. A cumulative delay would
+   be wrong here: the tenth card would sit still for a second after the reader
+   had already reached it. */
+[data-reveal-group] > *:nth-child(3n + 1) { transition-delay: 0ms; }
+[data-reveal-group] > *:nth-child(3n + 2) { transition-delay: 90ms; }
+[data-reveal-group] > *:nth-child(3n + 3) { transition-delay: 180ms; }
 
 /* Blur is the expensive part of this effect. Phones animate the same number
    of elements on far less GPU, so soften the radius there. */
@@ -165,7 +170,7 @@ h1, h2, h3, h4, h5 {
      wins on source order, and pins the blur on permanently — every phone
      would see the entire page stuck out of focus. */
   [data-reveal]:not([data-reveal="shown"]),
-  [data-reveal-group]:not([data-reveal-group="shown"]) > * {
+  [data-reveal-group] > *:not([data-reveal-item="shown"]) {
     filter: blur(5px);
   }
 }

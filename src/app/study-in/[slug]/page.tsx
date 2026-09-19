@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check } from "lucide-react";
@@ -7,6 +8,7 @@ import Flag from "@/components/Flag";
 import { Media, PageHero, Section } from "@/components/ui";
 import { countries, countryBySlug } from "@/lib/countries";
 import { countryPhoto, ogImage, photos } from "@/lib/images";
+import { countryPoster } from "@/lib/posters";
 
 export function generateStaticParams() {
   return countries.map((c) => ({ slug: c.slug }));
@@ -42,6 +44,7 @@ export default async function CountryPage({
   if (!country) notFound();
 
   const others = countries.filter((c) => c.slug !== country.slug).slice(0, 5);
+  const poster = countryPoster(country.slug);
 
   return (
     <>
@@ -61,13 +64,18 @@ export default async function CountryPage({
         <div className="grid gap-12 lg:grid-cols-12">
           {/* Main column */}
           <div className="lg:col-span-8">
-            <Media
-              photo={countryPhoto(country.slug)}
-              alt={`Studying in ${country.name}`}
-              ratio="aspect-[21/9]"
-              sizes="(max-width: 1024px) 100vw, 66vw"
-              className="mb-8 shadow-lg shadow-navy-900/10"
-            />
+            {/* Destinations we have poster artwork for show it in the sidebar
+                instead of a banner photo here — see the aside below. The rest
+                keep the wide photograph. */}
+            {!poster && (
+              <Media
+                photo={countryPhoto(country.slug)}
+                alt={`Studying in ${country.name}`}
+                ratio="aspect-[21/9]"
+                sizes="(max-width: 1024px) 100vw, 66vw"
+                className="mb-8 shadow-lg shadow-navy-900/10"
+              />
+            )}
 
             <p className="text-[16px] leading-[1.8] text-navy-700">
               {country.intro}
@@ -177,7 +185,21 @@ export default async function CountryPage({
 
           {/* Sidebar */}
           <aside className="lg:col-span-4">
-            <div className="lg:sticky lg:top-28 lg:space-y-5">
+            <div className="space-y-5 lg:sticky lg:top-28">
+              {poster && (
+                <figure>
+                  <div className="relative aspect-[2/3] overflow-hidden rounded-2xl border border-navy-100 shadow-xl shadow-navy-900/15">
+                    <Image
+                      src={poster}
+                      alt={`Vikas Overseas poster: Study in ${country.name}`}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 33vw"
+                      className="object-cover"
+                    />
+                  </div>
+                </figure>
+              )}
+
               <div className="overflow-hidden rounded-2xl border border-navy-100 bg-navy-900">
                 <Media
                   photo={photos.counsellingDesk}
@@ -204,7 +226,7 @@ export default async function CountryPage({
                 </div>
               </div>
 
-              <div className="mt-5 rounded-2xl border border-navy-100 bg-white p-6 lg:mt-0">
+              <div className="rounded-2xl border border-navy-100 bg-white p-6">
                 <h2 className="text-[13px] font-semibold tracking-[0.14em] text-navy-500 uppercase">
                   Other destinations
                 </h2>

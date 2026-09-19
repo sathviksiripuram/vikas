@@ -31,6 +31,9 @@ import { useEffect, useRef, type ElementType, type ReactNode } from "react";
  * per-element scroll handler — and it detaches as soon as nothing is left.
  * ------------------------------------------------------------------ */
 
+/** Attribute flipped on each revealed child of a RevealGroup. */
+const CHILD_ATTR = "data-reveal-item";
+
 const pending = new Map<HTMLElement, string>();
 let sweepTimer: ReturnType<typeof setTimeout> | null = null;
 let listening = false;
@@ -120,6 +123,60 @@ function useRevealOnce<T extends HTMLElement>(attr: string) {
   return ref;
 }
 
+/**
+ * Observes each direct child separately, so a card animates as *it* reaches
+ * the viewport rather than the whole grid firing the moment the container
+ * does. On a phone a six-card grid is several screens tall — observing the
+ * container meant everything below the fold had already played by the time
+ * you scrolled to it.
+ */
+function useRevealChildren<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const kids = Array.from(el.children) as HTMLElement[];
+
+    if (typeof IntersectionObserver === "undefined") {
+      for (const kid of kids) kid.setAttribute(CHILD_ATTR, "shown");
+      return;
+    }
+
+    for (const kid of kids) pending.set(kid, CHILD_ATTR);
+    startListening();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (
+            entry.isIntersecting ||
+            entry.boundingClientRect.top < window.innerHeight
+          ) {
+            const kid = entry.target as HTMLElement;
+            kid.setAttribute(CHILD_ATTR, "shown");
+            pending.delete(kid);
+            observer.unobserve(kid);
+          }
+        }
+        if (pending.size === 0) stopListening();
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" },
+    );
+
+    for (const kid of kids) observer.observe(kid);
+
+    return () => {
+      observer.disconnect();
+      for (const kid of kids) pending.delete(kid);
+      if (pending.size === 0) stopListening();
+    };
+  }, []);
+
+  return ref;
+}
+
 type Variant = "up" | "fade" | "left" | "right" | "zoom";
 
 /** Reveals a single block — a heading, an image, a paragraph. */
@@ -174,7 +231,7 @@ export function RevealGroup({
   variant?: Variant;
   as?: ElementType;
 }) {
-  const ref = useRevealOnce<HTMLElement>("data-reveal-group");
+  const ref = useRevealChildren<HTMLElement>();
 
   return (
     <Tag

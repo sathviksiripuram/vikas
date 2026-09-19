@@ -123,7 +123,7 @@ export default async function ServicePage({
           </div>
 
           <aside className="lg:col-span-4">
-            <div className="lg:sticky lg:top-28 lg:space-y-5">
+            <div className="space-y-5 lg:sticky lg:top-28">
               <div className="overflow-hidden rounded-2xl border border-navy-100 bg-navy-900">
                 <Media
                   photo={photos.counsellingDesk}
@@ -148,7 +148,7 @@ export default async function ServicePage({
                 </div>
               </div>
 
-              <div className="mt-5 rounded-2xl border border-navy-100 bg-white p-6 lg:mt-0">
+              <div className="rounded-2xl border border-navy-100 bg-white p-6">
                 <h2 className="text-[13px] font-semibold tracking-[0.14em] text-navy-500 uppercase">
                   Other services
                 </h2>
