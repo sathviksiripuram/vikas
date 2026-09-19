@@ -22,20 +22,24 @@ export type Photo = {
 };
 
 /**
- * Builds an Unsplash CDN URL.
+ * Resolves a photo to its local copy in /public/photos.
  *
- * The `w`/`q` here cap what Next.js downloads to resize from. Without them
- * Unsplash serves the full original — often 5000px and several megabytes —
- * which makes the first request for each image slow enough to time out.
- * 2000px is more than any slot on the site needs at 2x.
+ * These were originally hot-linked to Unsplash's CDN. That meant Next had to
+ * fetch the original across the network before it could produce each size,
+ * so the first visitor to hit any uncached variant waited on a third-party
+ * round trip — which on a phone showed up as images arriving slowly or not
+ * at all. Serving them from our own origin removes that hop entirely and
+ * takes Unsplash out of the runtime path.
+ *
+ * The files are fetched once at 1600px (see scripts note in README) and Next
+ * resizes down from there.
  */
-const unsplash = (id: string, width = 2000, quality = 80) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=${quality}`;
+const localPhoto = (id: string) => `/photos/${id}.jpg`;
 
 const photo = (id: string, alt: string): Photo => ({
-  src: unsplash(id),
+  src: localPhoto(id),
   alt,
-  og: `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&h=630&q=80`,
+  og: localPhoto(id),
 });
 
 /** Open Graph URL for any photo, including locally hosted ones. */

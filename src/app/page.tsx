@@ -250,6 +250,9 @@ export default function HomePage() {
                 sizes="(max-width: 1024px) 100vw, 40vw"
                 className="relative shadow-2xl shadow-navy-900/25 ring-1 ring-navy-900/10"
               />
+              {/* Decorative only, and hidden below sm — rendered inside the
+                  same breakpoint so phones do not carry a 0x0 image that can
+                  never load. */}
               <div className="absolute -right-4 -bottom-10 hidden w-44 sm:block lg:-right-6">
                 <Media
                   photo={photos.studentSmiling}

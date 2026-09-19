@@ -96,17 +96,17 @@ export default function Header() {
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          {/* The real logo, lifted from the company's own poster artwork.
-              It already contains the wordmark and tagline, so no text sits
-              beside it — the alt text carries the name for screen readers. */}
+          {/* The official logo. The supplied artwork is stacked (mark above
+              wordmark), which is unreadable at nav height, so the build step
+              composes a horizontal lockup from its two halves. */}
           <Link href="/" className="group flex shrink-0 items-center">
             <Image
-              src="/logo-compact.png"
+              src="/logo-horizontal.png"
               alt={`${site.name} — Overseas Educational Consultants`}
-              width={478}
-              height={120}
+              width={786}
+              height={260}
               priority
-              className="h-9 w-auto sm:h-11"
+              className="h-10 w-auto sm:h-12"
             />
           </Link>
 

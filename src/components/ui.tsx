@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
+import { blurFor } from "@/lib/blur-data";
 import { photos, type Photo } from "@/lib/images";
 
 /**
@@ -32,6 +33,8 @@ export function PageHero({
             alt=""
             fill
             sizes="100vw"
+            placeholder={blurFor(image.src) ? "blur" : "empty"}
+            blurDataURL={blurFor(image.src)}
             loading="eager"
             fetchPriority="high"
             className="object-cover object-center"
@@ -215,6 +218,8 @@ export function CTABand({
         alt=""
         fill
         sizes="100vw"
+        placeholder={blurFor(photo.src) ? "blur" : "empty"}
+        blurDataURL={blurFor(photo.src)}
         className="object-cover object-center"
       />
       <div
@@ -326,6 +331,8 @@ export function Media({
         alt={alt ?? photo.alt}
         fill
         sizes={sizes}
+        placeholder={blurFor(photo.src) ? "blur" : "empty"}
+        blurDataURL={blurFor(photo.src)}
         loading={eager ? "eager" : "lazy"}
         className={`object-cover ${
           zoom

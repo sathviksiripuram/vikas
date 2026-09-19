@@ -1,15 +1,19 @@
-import Image from "next/image";
+import { FLAG_DATA } from "@/lib/flag-data";
 
 /**
- * Renders a country flag as a real image.
+ * Renders a country flag.
  *
  * The flag emoji in `countries.ts` render as nothing on Windows — the OS ships
- * no glyphs for regional-indicator pairs — which left a blank gap wherever a
- * destination was labelled. These PNGs are a few hundred bytes each and render
- * identically everywhere, so they're served unoptimized (no resize needed).
+ * no glyphs for regional-indicator pairs — so these are images instead.
+ *
+ * They are inlined as data URIs rather than fetched: the home page lists every
+ * country three times over (hero picker, destination cards, footer), which was
+ * 33 cross-origin requests for a few hundred bytes each. On a phone the round
+ * trips cost far more than the pixels. A plain <img> is used because there is
+ * nothing for an image optimizer to do with an already-inlined 40x30 PNG.
  */
 
-/** Country slug → ISO 3166-1 alpha-2 code used by the flag CDN. */
+/** Country slug → ISO 3166-1 alpha-2, kept for callers that need the code. */
 export const flagCodes: Record<string, string> = {
   usa: "us",
   uk: "gb",
@@ -25,9 +29,9 @@ export const flagCodes: Record<string, string> = {
 };
 
 const sizes = {
-  sm: { w: 20, h: 15, cdn: 40 },
-  md: { w: 24, h: 18, cdn: 48 },
-  lg: { w: 32, h: 24, cdn: 80 },
+  sm: { w: 20, h: 15 },
+  md: { w: 24, h: 18 },
+  lg: { w: 32, h: 24 },
 } as const;
 
 export default function Flag({
@@ -42,18 +46,19 @@ export default function Flag({
   size?: keyof typeof sizes;
   className?: string;
 }) {
-  const code = flagCodes[slug];
-  if (!code) return null;
+  const src = FLAG_DATA[slug];
+  if (!src) return null;
 
-  const { w, h, cdn } = sizes[size];
+  const { w, h } = sizes[size];
 
   return (
-    <Image
-      src={`https://flagcdn.com/w${cdn}/${code}.png`}
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
       alt={name ? `${name} flag` : ""}
       width={w}
       height={h}
-      unoptimized
+      decoding="async"
       className={`shrink-0 rounded-[3px] object-cover ring-1 ring-black/10 ${className}`}
       style={{ width: w, height: h }}
     />

@@ -88,28 +88,4 @@ export const posterStrip: Poster[] = [
     caption: "Expert guidance",
     href: "/services",
   },
-  {
-    src: "/posters/global-journey.jpg",
-    alt: "Vikas Overseas poster: Your global journey starts here",
-    caption: "Your global journey",
-    href: "/contact",
-  },
-  {
-    src: "/posters/open-doors.jpg",
-    alt: "Vikas Overseas poster: Open doors to a brighter tomorrow",
-    caption: "Open doors",
-    href: "/about",
-  },
-  {
-    src: "/posters/trusted-partner.jpg",
-    alt: "Vikas Overseas poster: Your trusted partner for a global future",
-    caption: "Trusted partner",
-    href: "/about",
-  },
-  {
-    src: "/posters/discover-opportunities.jpg",
-    alt: "Vikas Overseas poster: Discover a world of opportunities",
-    caption: "A world of opportunity",
-    href: "/study-in",
-  },
 ];

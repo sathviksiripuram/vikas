@@ -25,16 +25,16 @@ export default function Footer() {
         <div className="grid gap-12 lg:grid-cols-12">
           {/* Brand */}
           <div className="lg:col-span-4">
-            {/* The logo artwork is printed on white, so on the navy footer
-                it sits on a white chip rather than being keyed out — the mark
-                has white inside the V that transparency would punch through. */}
+            {/* The logo is printed on white, so on the navy footer it sits on
+                a white chip rather than being keyed out — the mark has white
+                inside the V that transparency would punch through. */}
             <Link href="/" className="inline-block rounded-xl bg-white p-3">
               <Image
-                src="/logo.png"
+                src="/logo-horizontal.png"
                 alt={`${site.name} — Overseas Educational Consultants`}
-                width={478}
-                height={148}
-                className="h-11 w-auto"
+                width={786}
+                height={260}
+                className="h-12 w-auto"
               />
             </Link>
 

@@ -8,6 +8,7 @@ import Flag from "@/components/Flag";
 import { Media, PageHero, Section } from "@/components/ui";
 import { countries, countryBySlug } from "@/lib/countries";
 import { countryPhoto, ogImage, photos } from "@/lib/images";
+import { blurFor } from "@/lib/blur-data";
 import { countryPoster } from "@/lib/posters";
 
 export function generateStaticParams() {
@@ -194,6 +195,8 @@ export default async function CountryPage({
                       alt={`Vikas Overseas poster: Study in ${country.name}`}
                       fill
                       sizes="(max-width: 1024px) 100vw, 33vw"
+                      placeholder={blurFor(poster) ? "blur" : "empty"}
+                      blurDataURL={blurFor(poster)}
                       className="object-cover"
                     />
                   </div>

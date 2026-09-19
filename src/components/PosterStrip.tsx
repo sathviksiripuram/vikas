@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { blurFor } from "@/lib/blur-data";
 import { POSTER_RATIO, type Poster } from "@/lib/posters";
 
 /** Pixels per frame at 60fps. Slower than the ticker — these are images. */
@@ -26,15 +27,13 @@ function usePrefersReducedMotion() {
 function Row({
   posters,
   duplicate = false,
-  eager = false,
 }: {
   posters: Poster[];
   duplicate?: boolean;
-  eager?: boolean;
 }) {
   return (
     <ul className="flex shrink-0 items-stretch gap-4" aria-hidden={duplicate || undefined}>
-      {posters.map((poster, i) => (
+      {posters.map((poster) => (
         <li key={poster.src} className="w-[210px] shrink-0 sm:w-[240px]">
           <Link
             href={poster.href}
@@ -50,7 +49,9 @@ function Row({
                 alt={poster.alt}
                 fill
                 sizes="240px"
-                loading={eager && i < 3 ? "eager" : "lazy"}
+                placeholder={blurFor(poster.src) ? "blur" : "empty"}
+                blurDataURL={blurFor(poster.src)}
+                loading="lazy"
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
                 draggable={false}
               />
@@ -173,7 +174,7 @@ export default function PosterStrip({ posters }: { posters: Poster[] }) {
         style={{ touchAction: "pan-y" }}
       >
         <div className="flex w-max gap-4 px-1 pb-2">
-          <Row posters={posters} eager />
+          <Row posters={posters} />
           <Row posters={posters} duplicate />
         </div>
       </div>

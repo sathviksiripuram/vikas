@@ -12,6 +12,7 @@ import {
 import { ArrowRight, Check, Pause, Play } from "lucide-react";
 import Flag from "@/components/Flag";
 import { countries } from "@/lib/countries";
+import { blurFor } from "@/lib/blur-data";
 import type { Slide } from "@/lib/slides";
 
 const INTERVAL = 4000;
@@ -232,6 +233,8 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
                   alt=""
                   fill
                   sizes="100vw"
+                  placeholder={blurFor(slide.photo.src) ? "blur" : "empty"}
+                  blurDataURL={blurFor(slide.photo.src)}
                   {...(i === 0
                     ? // First slide is the LCP element — load it immediately.
                       {

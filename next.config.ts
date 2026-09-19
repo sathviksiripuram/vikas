@@ -2,22 +2,16 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Photography is served from Unsplash's CDN. When you swap in your own
-    // photos, drop them in /public and the registry in src/lib/images.ts can
-    // point at local paths instead — no change needed here.
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "/**",
-      },
-      // Country flags — see src/components/Flag.tsx
-      {
-        protocol: "https",
-        hostname: "flagcdn.com",
-        pathname: "/**",
-      },
-    ],
+    // Everything is served from our own origin now — the photography lives in
+    // /public/photos and the posters in /public/posters — so no remote hosts
+    // need allowing. Hot-linking Unsplash meant Next fetched the original
+    // across the network before it could resize, which was the main cause of
+    // slow first loads on mobile.
+    //
+    // Narrower breakpoints than the default set: fewer variants means a much
+    // higher cache-hit rate, so visitors rarely pay for a cold transform.
+    deviceSizes: [400, 640, 828, 1080, 1440, 1920],
+    imageSizes: [64, 128, 256, 384],
   },
 };
 
